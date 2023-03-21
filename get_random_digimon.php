@@ -18,13 +18,15 @@ while($result->fetch_assoc()) {
 }
 
 $get_random = rand(1,$count);
-echo $get_random;
+// echo $get_random;
 
 $sql = "SELECT * FROM `tamers_owns` WHERE `User_id` = '$User_id' AND `Digimon_id`='$get_random'";
 $result = $conn->query($sql);
+$output = "You draw a duplicate digimon, the level of that digimon will be added by one.";
 
 //Check if in database
 if ($result->num_rows > 0) {
+    
     
     while($row = $result->fetch_assoc()) {
         // get the level
@@ -37,14 +39,14 @@ if ($result->num_rows > 0) {
         $result = $conn->query($sql);
 
         // echo 'already';
-   
     }
     else{
         $date = date("Y/m/d"); 
         $sql = "INSERT INTO `tamers_owns`(`User_id`, `Digimon_id`, `Data`, `Level`) VALUES ('$User_id','$get_random','$date','1')";
         $result = $conn->query($sql);
         $level = 1;
-        echo 'inserted';
+        
+        $output = "You have drawn a digimon!!";
     }
     $sql = "SELECT `Name`, `Type`, `HP`, `Attack` FROM `digimon` WHERE `Digimon_id` = '$get_random'";
     $result = $conn->query($sql);	
@@ -55,10 +57,22 @@ if ($result->num_rows > 0) {
         $HP = $row["HP"];
         $Attack = $row["Attack"];
     }
-    echo "Name: ".$Name;
-    echo "Type: ".$Type;
-    echo "HP: ".$HP;
-    echo "Attack: ".$Attack;
-    echo "Level: ".$level;
+
+    // echo "Name: ".$Name;
+    // echo "Type: ".$Type;
+    // echo "HP: ".$HP;
+    // echo "Attack: ".$Attack;
+    // echo "Level: ".$level;
+
+    echo '<script>alert("'. $output .'")</script>';
+    echo '<script>alert("'.
+    "Name: ". $Name . '\n'.
+    "Type: ". $Type . '\n'.
+    "HP: ". $HP . '\n'.
+    "Attack: ". $Attack . '\n'.
+    "Level: ". $level
+    .'")</script>';
 
 ?>
+<h1>!Congratulations!</h1>
+<a href="tamer_info.php">return to info page</a>

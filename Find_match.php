@@ -1,12 +1,9 @@
 <?php
 session_start();
-    $User_id = $_SESSION['User_id'];
+$User_id = $_SESSION['User_id'];
 
-    if (!$_SESSION['Digimon_id']=''){
-        $Digimon_id = $_SESSION['Digimon_id'];
-        echo $Digimon_id;
-    }
-    
+//Create database connection -> 4 variables are 'localhost', username for the localhost (should be 'root', password for loacalhost (should be nothing), and database name
+$conn = new mysqli("localhost", "root", "", "digimon");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,23 +16,40 @@ session_start();
 </head>
 
 <body>
-    <form action="Find_match.php" method="post">
-        <h1>select your digimon</h1>
-        <?php
-            if (isset($Digimon_id)){
-                echo $Digimon_id;
-            }
-        ?>
-        <a href="select_digimon.php">change one</a>
+    <h1>select your digimon</h1>
+    <?php
+    if (isset($_SESSION['Digimon_id'])) {
+        $Digimon_id = $_SESSION['Digimon_id'];
+        $sql = "SELECT * FROM `tamers_owns` JOIN digimon on tamers_owns.Digimon_id = digimon.Digimon_id WHERE User_id = '$User_id' AND tamers_owns.Digimon_id = '$Digimon_id'";
+        $result = $conn->query($sql);
+        while ($row = $result->fetch_assoc()) {
+            // get the stat
+            $Name = $row["Name"];
+            $Type = $row["Type"];
+            $HP = $row["HP"];
+            $Attack = $row["Attack"];
+            $Level = $row["Level"];
+
+            $add_HP = ($Level - 1) * 50;
+            $add_Attack = ($Level - 1) * 10;
+        }
+    }
+
+    echo
+    "Name: " . $Name . "<hr>" .
+        "Type: " . $Type . "<hr>" .
+        "HP: " . $HP . "(+" . $add_HP . ")" . "<hr>" .
+        "Attack: " . $Attack . "(+" . $add_Attack . ")" . "<hr>" .
+        "Level: " . $Level . "<hr>"
+
+    ?>
+    <a href="select_digimon.php">change one</a>
+    <hr>
 
 
-        <h1>normal fight</h1>
-        <select name="Type" id="">
-            <option value="Normal_fight">Normal_fight</option>
-            <option value="tournment">Join a tournment</option>
-        </select>
-        <input type="submit" class='login_button'></input>
-    </form>
+    <a href="normal_competiton.php">Normal_fight</a>
+    <br>
+    <a href="normal_competiton.php">Join a tournment</a>
 
     <h1>current tournment</h1>
 

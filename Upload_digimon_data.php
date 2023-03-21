@@ -30,7 +30,6 @@ function addData($conn)
         $stmt = $conn->prepare("INSERT INTO `digimon`(Name, Type, HP, Attack) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("ssss", $email, $fname, $lname, $password);
         $stmt->execute();
-
     }
 }
 
@@ -58,47 +57,47 @@ $conn->close();
 
     <div id="output"></div>
     <script>
-    // read csv
-    function readSingleFile(evt) {
-        var f = evt.target.files[0];
+        // read csv
+        function readSingleFile(evt) {
+            var f = evt.target.files[0];
 
-        if (f) {
-            var r = new FileReader();
-            r.onload = function(e) {
-                var contents = e.target.result;
-                contents = contents.replaceAll('\n', '|');
-                document.getElementById('fileData').value = contents;
-                alert(document.getElementById('fileData').value);
+            if (f) {
+                var r = new FileReader();
+                r.onload = function(e) {
+                    var contents = e.target.result;
+                    contents = contents.replaceAll('\n', '|');
+                    document.getElementById('fileData').value = contents;
+                    alert(document.getElementById('fileData').value);
+                }
+                r.readAsText(f);
+            } else {
+                alert('File upload failed :(');
             }
-            r.readAsText(f);
-        } else {
-            alert('File upload failed :(');
         }
-    }
-    document.getElementById('fileinput').addEventListener('change', readSingleFile, false);
+        document.getElementById('fileinput').addEventListener('change', readSingleFile, false);
     </script>
     <script>
-    // display raw data
-    function read(contents) {
-        document.getElementById("output").innerHTML = contents;
-    }
-    // display as table
-    function table(rows) {
-        var html = "<table border='1|1'>";
-        for (var i = 0; i < rows.length; i++) {
-            html += "<tr>";
-            html += "<td>" + rows[i][0] + "</td>";
-            html += "<td>" + rows[i][1] + "</td>";
-            html += "<td>" + rows[i][2] + "</td>";
-            html += "<td>" + rows[i][3] + "</td>";
-            html += "<td>" + rows[i][4] + "</td>";
-
-            html += "</tr>";
-
+        // display raw data
+        function read(contents) {
+            document.getElementById("output").innerHTML = contents;
         }
-        html += "</table>";
-        document.getElementById("output").innerHTML = html;
-    }
+        // display as table
+        function table(rows) {
+            var html = "<table border='1|1'>";
+            for (var i = 0; i < rows.length; i++) {
+                html += "<tr>";
+                html += "<td>" + rows[i][0] + "</td>";
+                html += "<td>" + rows[i][1] + "</td>";
+                html += "<td>" + rows[i][2] + "</td>";
+                html += "<td>" + rows[i][3] + "</td>";
+                html += "<td>" + rows[i][4] + "</td>";
+
+                html += "</tr>";
+
+            }
+            html += "</table>";
+            document.getElementById("output").innerHTML = html;
+        }
     </script>
 
 
