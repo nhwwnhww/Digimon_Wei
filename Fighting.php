@@ -82,16 +82,6 @@ $opponet_digimon_id = $_POST['opponet_digimon_id'];
         "Level: " . $opponet_Level . "<hr>"
 
     ?>
-
-    <button onclick="battle(digimon1, digimon2);">fight!</button>
-    <a href="Find_match.php">cancel</a>
-
-    <form action="Fighting.php" action="post" style="display:none">
-        <input type="submit" value="ok">
-    </form>
-
-    <button onclick="test()"> test</button>
-
     <script>
         // my digimon
         var Name = '<?php echo $Name ?>';
@@ -108,6 +98,8 @@ $opponet_digimon_id = $_POST['opponet_digimon_id'];
         var opponet_Level = <?php echo $opponet_Level ?>;
         opponet_HP = opponet_HP + (opponet_Level - 1) * 50;
         opponet_Attack = opponet_Attack + (opponet_Level - 1) * 10;
+
+        var result = "";
 
         class Digimon {
             constructor(name, hp, attack) {
@@ -156,7 +148,8 @@ $opponet_digimon_id = $_POST['opponet_digimon_id'];
 
                 if (digimon2.isDefeated()) {
                     addToOutput(`${digimon2.name} is defeated! ${digimon1.name} wins!`, delay);
-                    break;
+                    result = "win";
+                    break
                 }
 
                 digimon2.attackOpponent(digimon1);
@@ -165,7 +158,8 @@ $opponet_digimon_id = $_POST['opponet_digimon_id'];
 
                 if (digimon1.isDefeated()) {
                     addToOutput(`${digimon1.name} is defeated! ${digimon2.name} wins!`, delay);
-                    break;
+                    result = "lose";
+                    break
                 }
 
                 round++;
@@ -174,7 +168,22 @@ $opponet_digimon_id = $_POST['opponet_digimon_id'];
 
         const digimon1 = new Digimon(Name, HP, Attack);
         const digimon2 = new Digimon(opponet_Name, opponet_HP, opponet_Attack);
+
+        function battleresult() {
+            // var digimon_result = battle(digimon1, digimon2);
+            battle(digimon1, digimon2);
+            alert(result);
+        }
     </script>
+
+    <button onclick="battleresult()">fight!</button>
+    <a href="Find_match.php">cancel</a>
+
+    <form action="Fighting.php" action="post" style="display:none">
+        <input type="submit" value="">
+    </form>
+
+
 
     <div id="output">
 
