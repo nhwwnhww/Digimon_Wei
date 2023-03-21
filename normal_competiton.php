@@ -72,6 +72,7 @@ $conn = new mysqli("localhost", "root", "", "digimon");
             $opponet_id = $row["User_id"];
             $opponet_digimon_id = $row["Digimon_id"];
 
+            echo  "<input type='hidden' name='Type' value='Normal Competion'>";
             echo  "<input type='hidden' name='opponet_id' value='$opponet_id'>";
             echo  "<input type='hidden' name='opponet_digimon_id' value='$opponet_digimon_id'>";
 

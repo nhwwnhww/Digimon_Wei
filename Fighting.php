@@ -3,17 +3,65 @@ session_start();
 $User_id = $_SESSION['User_id'];
 $Digimon_id = $_SESSION['Digimon_id'];
 
+$tournament_id = 999;
+
 // echo $User_id;
 // echo $Digimon_id;
 
 //Create database connection -> 4 variables are 'localhost', username for the localhost (should be 'root', password for loacalhost (should be nothing), and database name
 $conn = new mysqli("localhost", "root", "", "digimon");
 
+// post competition type
+// opponet id / digimon
+$Type = $_POST['Type'];
 $opponet_id = $_POST['opponet_id'];
 $opponet_digimon_id = $_POST['opponet_digimon_id'];
 
 // echo $opponet_id;
 // echo $opponet_digimon_id;
+
+if(isset($_POST["result"])){
+    $date = date("Y/m/d"); 
+    $result = $_POST["result"];
+
+    if ($result = "win"){
+        $opponet_result = "lose";
+    }
+    else{
+        $opponet_result = "win";
+    }
+
+    // // my result
+    // $sql = "INSERT INTO `participate`(`User_id`, `Digimon_id`, `Type`, `status`,`tournament_id`) VALUES ('$User_id','$Digimon_id','$Type','$result','$tournament_id')";
+    // $result = $conn->query($sql);
+
+
+
+    // echo $sql;
+
+    // $sql = "INSERT INTO `participate`(`User_id`, `Digimon_id`, `Type`, `status`,`tournament_id`) VALUES ('$opponet_id','$opponet_digimon_id','$Type','$opponet_result','$tournament_id')";
+    // $result = $conn->query($sql);
+    // echo $sql;
+
+    // if ($result = "win"){
+    //     $Win_participate_id = $User_id;
+    //     $Lose_participate_id = $opponet_id;
+
+    // }
+    // else{
+    //     $Win_participate_id = $opponet_id;
+    //     $Lose_participate_id = $User_id;
+    // }
+
+    
+    // $sql = "INSERT INTO `competion`( `Win_participate_id`, `Lose_participate_id`, `Date`, `Competion_type`) VALUES ('$Win_participate_id','$Lose_participate_id','$date','$Type')";
+    // $result = $conn->query($sql);
+    // echo $sql;
+
+    // exit(header("Location: tamer_info.php"));	
+
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -27,8 +75,6 @@ $opponet_digimon_id = $_POST['opponet_digimon_id'];
 </head>
 
 <body>
-
-    <!-- I need upload participate date -->
 
     <h1>My digimon stat</h1>
     <?php
@@ -99,7 +145,10 @@ $opponet_digimon_id = $_POST['opponet_digimon_id'];
         opponet_HP = opponet_HP + (opponet_Level - 1) * 50;
         opponet_Attack = opponet_Attack + (opponet_Level - 1) * 10;
 
+        // game result
         var result = "";
+        // game result output delay time count
+        var delay_time = 0;
 
         class Digimon {
             constructor(name, hp, attack) {
@@ -136,7 +185,7 @@ $opponet_digimon_id = $_POST['opponet_digimon_id'];
         async function battle(digimon1, digimon2) {
             let round = 1;
             let delay = 0;
-            const delayIncrement = 700; // 1000 milliseconds (1 second) delay between messages
+            const delayIncrement = 500; // 1000 milliseconds (1 second) delay between messages
 
             while (!digimon1.isDefeated() && !digimon2.isDefeated()) {
                 addToOutput(`Round ${round}:`, delay);
@@ -149,6 +198,7 @@ $opponet_digimon_id = $_POST['opponet_digimon_id'];
                 if (digimon2.isDefeated()) {
                     addToOutput(`${digimon2.name} is defeated! ${digimon1.name} wins!`, delay);
                     result = "win";
+                    delay_time = delay;
                     break
                 }
 
@@ -159,6 +209,7 @@ $opponet_digimon_id = $_POST['opponet_digimon_id'];
                 if (digimon1.isDefeated()) {
                     addToOutput(`${digimon1.name} is defeated! ${digimon2.name} wins!`, delay);
                     result = "lose";
+                    delay_time = delay;
                     break
                 }
 
@@ -172,15 +223,28 @@ $opponet_digimon_id = $_POST['opponet_digimon_id'];
         function battleresult() {
             // var digimon_result = battle(digimon1, digimon2);
             battle(digimon1, digimon2);
-            alert(result);
+            const form = document.getElementById("result_form");
+            setTimeout(function(){form.style.display = 'block';},delay_time);
+            
+            const B_result = document.getElementById("result");
+            B_result.value = result;
         }
     </script>
 
     <button onclick="battleresult()">fight!</button>
     <a href="Find_match.php">cancel</a>
 
-    <form action="Fighting.php" action="post" style="display:none">
-        <input type="submit" value="">
+    <form action="Fighting.php" action="post" id="result_form" style="display:none" method="post">
+
+    <!-- result -->
+    <input type="hidden" id="result" name="result" value="">
+    <!-- opponet id / digimon -->
+    <input type="hidden" id="result" name="opponet_id" value="<?php echo $opponet_id?>">
+    <input type="hidden" id="result" name="opponet_digimon_id" value="<?php echo $opponet_digimon_id?>">
+    <!-- competition type -->
+    <input type="hidden" id="result" name="Type" value="<?php echo $Type?>">
+
+    <input type="submit" value="Click me to go back">
     </form>
 
 

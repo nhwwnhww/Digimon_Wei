@@ -32,18 +32,25 @@ $conn = new mysqli("localhost", "root", "", "digimon");
 
             $add_HP = ($Level - 1) * 50;
             $add_Attack = ($Level - 1) * 10;
+
+            echo
+            "Name: " . $Name . "<hr>" .
+                "Type: " . $Type . "<hr>" .
+                "HP: " . $HP . "(+" . $add_HP . ")" . "<hr>" .
+                "Attack: " . $Attack . "(+" . $add_Attack . ")" . "<hr>" .
+                "Level: " . $Level . "<hr>";
         }
     }
+    else {
+        echo "please select a digimon to fight";
+    }
 
-    echo
-    "Name: " . $Name . "<hr>" .
-        "Type: " . $Type . "<hr>" .
-        "HP: " . $HP . "(+" . $add_HP . ")" . "<hr>" .
-        "Attack: " . $Attack . "(+" . $add_Attack . ")" . "<hr>" .
-        "Level: " . $Level . "<hr>"
+
 
     ?>
     <a href="select_digimon.php">change one</a>
+    <hr>
+    <a href="tamer_info.php">go back</a>
     <hr>
 
 
