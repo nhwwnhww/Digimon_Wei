@@ -71,10 +71,12 @@ $conn = new mysqli("localhost", "root", "", "digimon");
             // get opponent and digimon id
             $opponet_id = $row["User_id"];
             $opponet_digimon_id = $row["Digimon_id"];
+            $opponet_Owner_id = $row["Owner_id"];
 
             echo  "<input type='hidden' name='Type' value='Normal Competion'>";
             echo  "<input type='hidden' name='opponet_id' value='$opponet_id'>";
             echo  "<input type='hidden' name='opponet_digimon_id' value='$opponet_digimon_id'>";
+            echo  "<input type='hidden' name='opponet_Owner_id' value='$opponet_Owner_id'>";
 
 
             $add_HP = ($Level - 1) * 50;

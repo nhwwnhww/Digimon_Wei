@@ -2,8 +2,8 @@
 session_start();
 $User_id = $_SESSION['User_id'];
 $Digimon_id = $_SESSION['Digimon_id'];
+$Owner_id = $_SESSION['Owner_id']; 
 
-$tournament_id = 999;
 
 // echo $User_id;
 // echo $Digimon_id;
@@ -13,9 +13,9 @@ $conn = new mysqli("localhost", "root", "", "digimon");
 
 // post competition type
 // opponet id / digimon
-$Type = $_POST['Type'];
 $opponet_id = $_POST['opponet_id'];
 $opponet_digimon_id = $_POST['opponet_digimon_id'];
+$opponet_Owner_id = $_POST['opponet_Owner_id'];
 
 // echo $opponet_id;
 // echo $opponet_digimon_id;
@@ -24,39 +24,21 @@ if(isset($_POST["result"])){
     $date = date("Y/m/d"); 
     $result = $_POST["result"];
 
+
     if ($result = "win"){
-        $opponet_result = "lose";
+        $Win_participate_id = $Owner_id;
+        $Lose_participate_id = $opponet_Owner_id;
+
     }
     else{
-        $opponet_result = "win";
+        $Win_participate_id = $opponet_Owner_id;
+        $Lose_participate_id = $Owner_id;
     }
 
-    // // my result
-    // $sql = "INSERT INTO `participate`(`User_id`, `Digimon_id`, `Type`, `status`,`tournament_id`) VALUES ('$User_id','$Digimon_id','$Type','$result','$tournament_id')";
-    // $result = $conn->query($sql);
-
-
-
-    // echo $sql;
-
-    // $sql = "INSERT INTO `participate`(`User_id`, `Digimon_id`, `Type`, `status`,`tournament_id`) VALUES ('$opponet_id','$opponet_digimon_id','$Type','$opponet_result','$tournament_id')";
-    // $result = $conn->query($sql);
-    // echo $sql;
-
-    // if ($result = "win"){
-    //     $Win_participate_id = $User_id;
-    //     $Lose_participate_id = $opponet_id;
-
-    // }
-    // else{
-    //     $Win_participate_id = $opponet_id;
-    //     $Lose_participate_id = $User_id;
-    // }
-
     
-    // $sql = "INSERT INTO `competion`( `Win_participate_id`, `Lose_participate_id`, `Date`, `Competion_type`) VALUES ('$Win_participate_id','$Lose_participate_id','$date','$Type')";
-    // $result = $conn->query($sql);
-    // echo $sql;
+    $sql = "INSERT INTO `competion`( `Organizer_id`,`Win_participate_id`, `Lose_participate_id`, `Date`) VALUES ('$User_id','$Win_participate_id','$Lose_participate_id','$date')";
+    $result = $conn->query($sql);
+    echo $sql;
 
     // exit(header("Location: tamer_info.php"));	
 
@@ -115,6 +97,7 @@ if(isset($_POST["result"])){
         $opponet_HP = $row["HP"];
         $opponet_Attack = $row["Attack"];
         $opponet_Level = $row["Level"];
+        $opponet_Owner_id = $row["Owner_id"];
 
         $opponet_add_HP = ($opponet_Level - 1) * 50;
         $opponet_add_Attack = ($opponet_Level - 1) * 10;
@@ -129,106 +112,110 @@ if(isset($_POST["result"])){
 
     ?>
     <script>
-        // my digimon
-        var Name = '<?php echo $Name ?>';
-        var HP = <?php echo $HP ?>;
-        var Attack = <?php echo $Attack ?>;
-        var Level = <?php echo $Level ?>;
-        HP = HP + (Level - 1) * 50;
-        Attack = Attack + (Level - 1) * 10;
+    // my digimon
+    var Name = '<?php echo $Name ?>';
+    var HP = <?php echo $HP ?>;
+    var Attack = <?php echo $Attack ?>;
+    var Level = <?php echo $Level ?>;
+    HP = HP + (Level - 1) * 50;
+    Attack = Attack + (Level - 1) * 10;
 
-        // opponet digimon
-        var opponet_Name = '<?php echo $opponet_Name ?>';
-        var opponet_HP = <?php echo $opponet_HP ?>;
-        var opponet_Attack = <?php echo $opponet_Attack ?>;
-        var opponet_Level = <?php echo $opponet_Level ?>;
-        opponet_HP = opponet_HP + (opponet_Level - 1) * 50;
-        opponet_Attack = opponet_Attack + (opponet_Level - 1) * 10;
+    // opponet digimon
+    var opponet_Name = '<?php echo $opponet_Name ?>';
+    var opponet_HP = <?php echo $opponet_HP ?>;
+    var opponet_Attack = <?php echo $opponet_Attack ?>;
+    var opponet_Level = <?php echo $opponet_Level ?>;
+    opponet_HP = opponet_HP + (opponet_Level - 1) * 50;
+    opponet_Attack = opponet_Attack + (opponet_Level - 1) * 10;
 
-        // game result
-        var result = "";
-        // game result output delay time count
-        var delay_time = 0;
+    // game result
+    var result = "";
+    // game result output delay time count
+    var delay_time = 0;
 
-        class Digimon {
-            constructor(name, hp, attack) {
-                this.name = name;
-                this.hp = hp;
-                this.attack = attack;
-            }
+    class Digimon {
+        constructor(name, hp, attack) {
+            this.name = name;
+            this.hp = hp;
+            this.attack = attack;
+        }
 
-            takeDamage(damage) {
-                this.hp -= damage;
-                if (this.hp < 0) {
-                    this.hp = 0;
-                }
-            }
-
-            attackOpponent(opponent) {
-                opponent.takeDamage(this.attack);
-            }
-
-            isDefeated() {
-                return this.hp === 0;
+        takeDamage(damage) {
+            this.hp -= damage;
+            if (this.hp < 0) {
+                this.hp = 0;
             }
         }
 
-        function addToOutput(message, delay) {
-            setTimeout(() => {
-                const outputDiv = document.getElementById("output");
-                const newLine = document.createElement("div");
-                newLine.innerText = message;
-                outputDiv.appendChild(newLine);
-            }, delay);
+        attackOpponent(opponent) {
+            opponent.takeDamage(this.attack);
         }
 
-        async function battle(digimon1, digimon2) {
-            let round = 1;
-            let delay = 0;
-            const delayIncrement = 500; // 1000 milliseconds (1 second) delay between messages
+        isDefeated() {
+            return this.hp === 0;
+        }
+    }
 
-            while (!digimon1.isDefeated() && !digimon2.isDefeated()) {
-                addToOutput(`Round ${round}:`, delay);
-                delay += delayIncrement;
+    function addToOutput(message, delay) {
+        setTimeout(() => {
+            const outputDiv = document.getElementById("output");
+            const newLine = document.createElement("div");
+            newLine.innerText = message;
+            outputDiv.appendChild(newLine);
+        }, delay);
+    }
 
-                digimon1.attackOpponent(digimon2);
-                addToOutput(`${digimon1.name} attacks ${digimon2.name}! ${digimon2.name} has ${digimon2.hp} HP left.`, delay);
-                delay += delayIncrement;
+    async function battle(digimon1, digimon2) {
+        let round = 1;
+        let delay = 0;
+        const delayIncrement = 500; // 1000 milliseconds (1 second) delay between messages
 
-                if (digimon2.isDefeated()) {
-                    addToOutput(`${digimon2.name} is defeated! ${digimon1.name} wins!`, delay);
-                    result = "win";
-                    delay_time = delay;
-                    break
-                }
+        while (!digimon1.isDefeated() && !digimon2.isDefeated()) {
+            addToOutput(`Round ${round}:`, delay);
+            delay += delayIncrement;
 
-                digimon2.attackOpponent(digimon1);
-                addToOutput(`${digimon2.name} attacks ${digimon1.name}! ${digimon1.name} has ${digimon1.hp} HP left.`, delay);
-                delay += delayIncrement;
+            digimon1.attackOpponent(digimon2);
+            addToOutput(`${digimon1.name} attacks ${digimon2.name}! ${digimon2.name} has ${digimon2.hp} HP left.`,
+                delay);
+            delay += delayIncrement;
 
-                if (digimon1.isDefeated()) {
-                    addToOutput(`${digimon1.name} is defeated! ${digimon2.name} wins!`, delay);
-                    result = "lose";
-                    delay_time = delay;
-                    break
-                }
-
-                round++;
+            if (digimon2.isDefeated()) {
+                addToOutput(`${digimon2.name} is defeated! ${digimon1.name} wins!`, delay);
+                result = "win";
+                delay_time = delay;
+                break
             }
-        }
 
-        const digimon1 = new Digimon(Name, HP, Attack);
-        const digimon2 = new Digimon(opponet_Name, opponet_HP, opponet_Attack);
+            digimon2.attackOpponent(digimon1);
+            addToOutput(`${digimon2.name} attacks ${digimon1.name}! ${digimon1.name} has ${digimon1.hp} HP left.`,
+                delay);
+            delay += delayIncrement;
 
-        function battleresult() {
-            // var digimon_result = battle(digimon1, digimon2);
-            battle(digimon1, digimon2);
-            const form = document.getElementById("result_form");
-            setTimeout(function(){form.style.display = 'block';},delay_time);
-            
-            const B_result = document.getElementById("result");
-            B_result.value = result;
+            if (digimon1.isDefeated()) {
+                addToOutput(`${digimon1.name} is defeated! ${digimon2.name} wins!`, delay);
+                result = "lose";
+                delay_time = delay;
+                break
+            }
+
+            round++;
         }
+    }
+
+    const digimon1 = new Digimon(Name, HP, Attack);
+    const digimon2 = new Digimon(opponet_Name, opponet_HP, opponet_Attack);
+
+    function battleresult() {
+        // var digimon_result = battle(digimon1, digimon2);
+        battle(digimon1, digimon2);
+        const form = document.getElementById("result_form");
+        setTimeout(function() {
+            form.style.display = 'block';
+        }, delay_time);
+
+        const B_result = document.getElementById("result");
+        B_result.value = result;
+    }
     </script>
 
     <button onclick="battleresult()">fight!</button>
@@ -236,15 +223,16 @@ if(isset($_POST["result"])){
 
     <form action="Fighting.php" action="post" id="result_form" style="display:none" method="post">
 
-    <!-- result -->
-    <input type="hidden" id="result" name="result" value="">
-    <!-- opponet id / digimon -->
-    <input type="hidden" id="result" name="opponet_id" value="<?php echo $opponet_id?>">
-    <input type="hidden" id="result" name="opponet_digimon_id" value="<?php echo $opponet_digimon_id?>">
-    <!-- competition type -->
-    <input type="hidden" id="result" name="Type" value="<?php echo $Type?>">
+        <!-- result -->
+        <input type="hidden" id="result" name="result" value="">
+        <!-- opponet id / digimon -->
+        <input type="hidden" id="result" name="opponet_id" value="<?php echo $opponet_id?>">
+        <input type="hidden" id="result" name="opponet_digimon_id" value="<?php echo $opponet_digimon_id?>">
+        <input type="hidden" id="result" name="opponet_Owner_id" value="<?php echo $opponet_Owner_id?>">
+        <!-- competition type -->
+        <input type="hidden" id="result" name="Type" value="<?php echo $Type?>">
 
-    <input type="submit" value="Click me to go back">
+        <input type="submit" value="Click me to go back">
     </form>
 
 

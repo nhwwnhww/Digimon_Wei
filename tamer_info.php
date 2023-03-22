@@ -1,4 +1,4 @@
-<?php
+`<?php
 session_start();
 // if (time() < $_SESSION['time'] + 120){
     $User_id = $_SESSION['User_id'];
@@ -20,6 +20,7 @@ session_start();
     <title>tamer <?php echo $User_id?>'s page</title>
 </head>
 <body>
+    <a href="index.php">sign out</a>
     <h1>Hi! <?php echo $First_name?></h1>
 <a href="user_update.php">Update User</a>
 <a href="Find_match.php">Find match</a>

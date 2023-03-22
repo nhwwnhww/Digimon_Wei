@@ -20,9 +20,13 @@ $conn = new mysqli("localhost", "root", "", "digimon");
     <?php
     if (isset($_SESSION['Digimon_id'])) {
         $Digimon_id = $_SESSION['Digimon_id'];
+        $Owner_id = $_SESSION['Owner_id'];
         $sql = "SELECT * FROM `tamers_owns` JOIN digimon on tamers_owns.Digimon_id = digimon.Digimon_id WHERE User_id = '$User_id' AND tamers_owns.Digimon_id = '$Digimon_id'";
         $result = $conn->query($sql);
         while ($row = $result->fetch_assoc()) {
+            // get owner id
+            
+
             // get the stat
             $Name = $row["Name"];
             $Type = $row["Type"];
@@ -55,10 +59,7 @@ $conn = new mysqli("localhost", "root", "", "digimon");
 
 
     <a href="normal_competiton.php">Normal_fight</a>
-    <br>
-    <a href="normal_competiton.php">Join a tournment</a>
 
-    <h1>current tournment</h1>
 
 </body>
 
