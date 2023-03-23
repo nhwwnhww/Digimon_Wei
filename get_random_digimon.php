@@ -32,8 +32,8 @@ if ($result->num_rows > 0) {
         // get the level
         $original_level = $row["Level"];
     }
-        // add level
-        $level = $original_level + 1;
+        // if duplicate then add level
+        $level = $original_level + 5;
 
         $sql = "UPDATE `tamers_owns` SET `Level`='$level' WHERE `User_id`='$User_id' AND `Digimon_id`='$get_random'";
         $result = $conn->query($sql);
@@ -72,7 +72,15 @@ if ($result->num_rows > 0) {
     "Attack: ". $Attack . '\n'.
     "Level: ". $level
     .'")</script>';
-
 ?>
-<h1>!Congratulations!</h1>
-<a href="tamer_info.php">return to info page</a>
+
+<h1>DAMNNN!!!</h1>
+<h3><?php echo $Name?> , LET'S GOOO</h3>
+<a id="jump" href="tamer_info.php">return to previous page</a>
+<?php
+    if (isset($_GET["web"])){
+        $web = $_GET["web"];
+        // echo $web;
+        echo "<script>document.getElementById('jump').href = '$web.php';</script>";
+    }
+?>

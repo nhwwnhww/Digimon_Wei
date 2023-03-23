@@ -49,27 +49,30 @@ if (isset($_GET["sort"])) {
 
     <h1>back</h1>
     <a href="Find_match.php">back</a>
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>HP</th>
-            <th>Attack</th>
-            <th>Level</th>
-        </tr>
         <?php
 
-            //Create database connection -> 4 variables are 'localhost', username for the localhost (should be 'root', password for loacalhost (should be nothing), and database name
-            $conn = new mysqli("localhost", "root", "", "digimon");
+        //Create database connection -> 4 variables are 'localhost', username for the localhost (should be 'root', password for loacalhost (should be nothing), and database name
+        $conn = new mysqli("localhost", "root", "", "digimon");
 
-            //sql 
-            $sql = "SELECT * FROM `tamers_owns` 
+        //sql 
+        $sql = "SELECT * FROM `tamers_owns` 
     JOIN digimon on tamers_owns.Digimon_id = digimon.Digimon_id
     WHERE `User_id` = '$User_id'
     $sort
     ";
 
-            $result = $conn->query($sql);
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+
+            echo '<table>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>HP</th>
+                <th>Attack</th>
+                <th>Level</th>
+            </tr>';
+
             while ($row = $result->fetch_assoc()) {
                 //put in row
                 echo "<tr>
@@ -91,7 +94,14 @@ if (isset($_GET["sort"])) {
 
             </tr>";
             }
-            ?>
+        }
+        else{
+            echo "<h1>Don't have a Digimon? Don't worry! Click here to get one!</h1>";
+            echo "<a href='get_random_digimon.php?web=select_digimon'>click me!</a>";
+        }
+        ?>
+        <br>
+        <a href='get_random_digimon.php?web=select_digimon'>get more digimon</a>
     </table>
 
 

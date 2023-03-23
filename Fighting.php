@@ -26,21 +26,32 @@ if(isset($_POST["result"])){
 
 
     if ($result = "win"){
-        $Win_participate_id = $Owner_id;
-        $Lose_participate_id = $opponet_Owner_id;
+        $Winner_own_id = $Owner_id;
+        $Loser_own_id = $opponet_Owner_id;
+
+        $sql = "SELECT `Level` FROM `tamers_owns` WHERE `Owner_id` = '$Owner_id'";
+        $result = $conn->query($sql);
+        while ($row = $result->fetch_assoc()) {
+            // get the stat
+            $Level = $row["Level"];
+        }
+        $Level += 1;
+
+        $sql = "UPDATE `tamers_owns` SET `Level`='$Level' WHERE `Owner_id` = '$Owner_id'";
+        $result = $conn->query($sql);
 
     }
     else{
-        $Win_participate_id = $opponet_Owner_id;
-        $Lose_participate_id = $Owner_id;
+        $Winner_own_id = $opponet_Owner_id;
+        $Loser_own_id = $Owner_id;
     }
 
     
-    $sql = "INSERT INTO `competion`( `Organizer_id`,`Win_participate_id`, `Lose_participate_id`, `Date`) VALUES ('$User_id','$Win_participate_id','$Lose_participate_id','$date')";
+    $sql = "INSERT INTO `competion`( `Organizer_id`,`Winner_own_id`, `Loser_own_id`, `Date`) VALUES ('$User_id','$Winner_own_id','$Loser_own_id','$date')";
     $result = $conn->query($sql);
     echo $sql;
 
-    // exit(header("Location: tamer_info.php"));	
+    exit(header("Location: tamer_info.php"));	
 
 }
 

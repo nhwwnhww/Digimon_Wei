@@ -1,12 +1,12 @@
 <?php
 session_start();
-if (time() < $_SESSION['time'] + 120){
+// if (time() < $_SESSION['time'] + 120){
     $User_id = $_SESSION['User_id'];
-    $_SESSION['time'] = time();
-}
-else {
-    exit(header("Location: index.php"));
-}
+    // $_SESSION['time'] = time();
+// }
+// else {
+//     exit(header("Location: index.php"));
+// }
 
 if(isset($_POST['Email'])){
 	if ($_POST['Email']!= '' && $_POST['Password']!= ''){
