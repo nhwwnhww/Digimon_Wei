@@ -48,7 +48,15 @@ if (isset($_GET["sort"])) {
 
 
     <h1>back</h1>
-    <a href="Find_match.php">back</a>
+    <?php
+        if(isset($_GET["web"])){
+            $web = $_GET["web"];
+            echo "<a href='$web.php'>back</a>";
+        }
+        else{
+            echo "<a href='Find_match.php'>back</a>";
+        }
+    ?>
         <?php
 
         //Create database connection -> 4 variables are 'localhost', username for the localhost (should be 'root', password for loacalhost (should be nothing), and database name

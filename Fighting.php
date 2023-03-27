@@ -230,7 +230,9 @@ if(isset($_POST["result"])){
     </script>
 
     <button onclick="battleresult()">fight!</button>
+    <br>
     <a href="Find_match.php">cancel</a>
+    <br>
 
     <form action="Fighting.php" action="post" id="result_form" style="display:none" method="post">
 
@@ -243,7 +245,7 @@ if(isset($_POST["result"])){
         <!-- competition type -->
         <input type="hidden" id="result" name="Type" value="<?php echo $Type?>">
 
-        <input type="submit" value="Click me to go back">
+        <input type="submit" value="Go back">
     </form>
 
 

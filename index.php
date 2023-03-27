@@ -43,6 +43,7 @@ if(isset($_POST['email'])){
 </head>
 <body>
 <h1 class='mainheading'>Home page</h1>
+<h1>Clash DigiWei</h1>
 
     <div class="login">
         <form action="index.php" method="post">
@@ -57,6 +58,5 @@ if(isset($_POST['email'])){
     </div>
 
     <a href="Upload_digimon_data.php">upload digimon data</a>
-    <a href="test.php">test data</a>
 </body>
 </html>

@@ -58,7 +58,7 @@ $conn = new mysqli("localhost", "root", "", "digimon");
     <hr>
 
 
-    <a href="normal_competiton.php">Normal_fight</a>
+    <a href="normal_competiton.php">Find a battle!!</a>
 
 
 </body>
