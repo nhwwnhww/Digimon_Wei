@@ -95,7 +95,7 @@ if(isset($_POST["result"])){
         "Level: " . $Level . "<hr>"
 
     ?>
-    <h1>opponet digimon stat</h1>
+    <h1>opponent digimon stat</h1>
     <?php
 
     //my digimon stat
