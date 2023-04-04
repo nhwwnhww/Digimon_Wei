@@ -1,13 +1,6 @@
 <?php
 session_start();
-// if (time() < $_SESSION['time'] + 120){
 $User_id = $_SESSION['User_id'];
-$First_name = $_SESSION['First_name'];
-// $_SESSION['time'] = time();
-// }
-// else {
-//     exit(header("Location: index.php"));
-// }
 
 //Create database connection -> 4 variables are 'localhost', username for the localhost (should be 'root', password for loacalhost (should be nothing), and database name
 $conn = new mysqli("localhost", "root", "", "digimon");
@@ -130,143 +123,75 @@ $conn = new mysqli("localhost", "root", "", "digimon");
                 </li>
                 <li><a href="tamer_info.php">Tamer Page</a>
                 </li>
-                <li><a href="#">About me</a>
-                    <ul>
-                        <li>
-                            <a href="select_digimon.php?web=tamer_info">My digimon</a>
-                        </li>
-                        <li>
-                            <a href="competition_record.php">My battle history</a>
-                        </li>
-                        <li><a href="user_update.php">Update my information</a></li>
-                    </ul>
-                </li>
-                <li><a href="Find_match.php">Find match</a></li>
-                <li>
-                    <a href="index.php">sign out</a>
-                </li>
             </ul>
         </div>
     </div>
 
     <div id="page-container">
         <div class="max-width">
-            <div id="nav-section">
-                <div class="box-sizing">
-                    <h1>My digimon</h1>
-                    <?php
-    //sql 
-    $sql = "SELECT * FROM `tamers_owns` JOIN digimon on tamers_owns.Digimon_id = digimon.Digimon_id 
-        WHERE `User_id` = '$User_id' 
-        ORDER BY `tamers_owns`.`Level` DESC";
-
-    $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
-
-        echo '<table>
-            <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Level</th>
-            </tr>';
-
-            $count = 0;
-        while ($row = $result->fetch_assoc()) {
-            //put in row
-            echo "<tr>
-            <td>{$row["Name"]}</td>
-            <td>{$row["Type"]}</td>
-            <td>{$row["Level"]}</td>
-
-            </tr>";
-            // output only five 
-            $count+=1;
-            if($count == 5){
-                break;
-            }
-        }
-        echo '</table>';
-    }
-    ?>
-                    <a href="select_digimon.php?web=tamer_info">show more</a>
-                    <br>    
-                    <a href="get_random_digimon.php">click me to get random digimon</a>
-                    <br>
-
-                    <a href="Upload_digimon_data.php">upload digimon data</a>
-                </div>
-            </div>
-
             <div id="content-container">
                 <div id="breadcrumbs">
                     <h2>You are here:</h2>
                     <ol>
                         <li><a href="index.php">Home</a></li>
-                        <li class="last-child">Tamer's Home Page</li>
+                        <li><a href="tamer_info.php">Tamer's Home Page</a></li>
+                        <li class="last-child">Competition record</li>
                     </ol>
                 </div>
                 <div id="content">
 
                     <div class="article">
                         <div class="box-sizing">
-                            <h1>Hi! <?php echo $First_name ?></h1>
-                            <a href="user_update.php">Update User</a>
-                            <hr>
-                            <div class="container">
-                                <div class="row">
-                                    <a href="Find_match.php" class="btn btn-primary text-white" style="text-decoration:none">Find match</a>
-                                </div>
-                            </div>
+
+                            <?php
+                                $sql = "SELECT `competion`.`Competion_id`,`competion`.`Date`, w_n.First_name as winner, l_n.First_name as loser,w_d.Name as winner_digimon,l_d.Name as loser_digimon FROM `competion`
+                                JOIN tamers_owns w on competion.Winner_own_id = w.Owner_id
+                                JOIN tamers_owns l on competion.Loser_own_id = l.Owner_id
+                                JOIN tamers w_n on w.User_id = w_n.User_id
+                                JOIN tamers l_n on l.User_id = l_n.User_id
+                                JOIN digimon w_d on w.Digimon_id = w_d.Digimon_id        
+                                JOIN digimon l_d on l.Digimon_id = l_d.Digimon_id
+                                WHERE `competion`.`Organizer_id` = '$User_id'
+                                ORDER BY `competion`.`Competion_id` DESC";
                             
+                            $result = $conn->query($sql);
+                            if ($result->num_rows > 0) {
+                            
+                                echo "<table class='table table-striped table-hover table-bordered'>
+                                <caption>History of all your competition</caption>
+                                <thead> 
+                                <tr>
+                                    <th>#</th>
+                                    <th>Competion Date</th>
+                                    <th>winner</th>
+                                    <th>winner digimon name</th>
+                                    <th>loser</th>
+                                    <th>loser digimon name</th>
+                                </tr>
+                                </thead>";
+                            
+                                while ($row = $result->fetch_assoc()) {
+                                    //put in row
+                                    echo "<tbody>
+                                    <tr class='even'>
+                            
+                                <td class='table-active'>{$row["Competion_id"]}</td>
+                                <td>{$row["Date"]}</td>
+                                <td>{$row["winner"]}</td>
+                                <td>{$row["winner_digimon"]}</td>
+                                <td>{$row["loser"]}</td>
+                                <td>{$row["loser_digimon"]}</td>
+                            
+                            
+                                </tr>";
+                                }
+                                echo '</tbody>
+                                </table>';
+                            }
+                            ?>
 
-
+                            <a href='tamer_info.php' type="button" class="btn btn-secondary text-white" style="text-decoration:none">back</a>
                         </div>
-                    </div>
-                </div>
-                <div class="aside">
-                    <div class="box-sizing">
-                        <h1>competition</h1>
-                        <?php
-    //sql 
-    $sql = "SELECT *, tamers_owns.User_id as user FROM `competion` 
-    JOIN tamers_owns on competion.Winner_own_id = tamers_owns.Owner_id
-    WHERE `competion`.`Organizer_id` = '$User_id' 
-    ORDER BY `competion`.`Competion_id` DESC";
-
-    $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
-
-        echo '<table>
-            <tr>
-                <th>Competition ID</th>
-                <th>data</th>
-                <th>result</th>
-            </tr>';
-
-            $count = 0;
-            while ($row = $result->fetch_assoc()) {
-            $result_1 = 'lost';
-            $winner = $row["user"];
-            if($row["user"] == $User_id){
-                $result_1 = 'win';
-            }
-            //put in row
-            echo "<tr>
-            <td>{$row["Competion_id"]}</td>
-            <td>{$row["Date"]}</td>
-            <td>$result_1</td>
-
-            </tr>";
-            // output only five 
-            $count+=1;
-            if($count == 5){
-                break;
-            }
-        }
-        echo '</table>';
-    }
-    ?>
-                        <a href="competition_record.php">show more</a>
                     </div>
                 </div>
             </div>
