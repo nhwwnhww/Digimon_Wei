@@ -6,7 +6,13 @@ if(isset($_POST['Email'])){
 		$conn = new mysqli("localhost", "root", "","digimon");
 		
 		//This line makes the sql
-        $sql = "INSERT INTO `tamers`(`First_name`, `Last_name`, `Data`, `Email`, `Password`, `Phone`,`Rank`,`Is_admin`) VALUES ('{$_POST['First_name']}','{$_POST['Last_name']}','{$_POST['Data']}','{$_POST['Email']}','{$_POST['Password']}','{$_POST['Phone']}','stone','no')";
+        $sql = "INSERT INTO `tamers`(`First_name`, `Last_name`, `Data`, `Email`, `Password`, `Phone`,`Rank`,`Is_admin`) 
+        VALUES ('{$_POST['First_name']}',
+        '{$_POST['Last_name']}',
+        '{$_POST['Data']}',
+        '{$_POST['Email']}',
+        '{$_POST['Password']}',
+        '{$_POST['Phone']}','stone','no')";
 		//This line runs the query and checks for an error
 		if(!$conn->query($sql)){
 			echo $sql;

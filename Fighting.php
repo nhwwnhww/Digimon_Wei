@@ -339,23 +339,19 @@ if(isset($_POST["result"])){
                                     this.hp = hp;
                                     this.attack = attack;
                                 }
-
                                 takeDamage(damage) {
                                     this.hp -= damage;
                                     if (this.hp < 0) {
                                         this.hp = 0;
                                     }
                                 }
-
                                 attackOpponent(opponent) {
                                     opponent.takeDamage(this.attack);
                                 }
-
                                 isDefeated() {
                                     return this.hp === 0;
                                 }
                             }
-
                             function addToOutput(message, delay) {
                                 setTimeout(() => {
                                     const outputDiv = document.getElementById("output");
@@ -364,12 +360,10 @@ if(isset($_POST["result"])){
                                     outputDiv.appendChild(newLine);
                                 }, delay);
                             }
-
                             async function battle(digimon1, digimon2) {
                                 let round = 1;
                                 let delay = 0;
                                 const delayIncrement = 500; // 1000 milliseconds (1 second) delay between messages
-
                                 while (!digimon1.isDefeated() && !digimon2.isDefeated()) {
                                     addToOutput(`Round ${round}:`, delay);
                                     delay += delayIncrement;

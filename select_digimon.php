@@ -194,15 +194,12 @@ $conn = new mysqli("localhost", "root", "", "digimon");
                         <div class="box-sizing">
 
                             <?php
-
                             //sql 
                             $sql = "SELECT * FROM `tamers_owns` 
                             JOIN digimon on tamers_owns.Digimon_id = digimon.Digimon_id
                             WHERE `User_id` = '$User_id'
                             $sort
                             ";
-
-                            
 
                             $result = $conn->query($sql);
                             if ($result->num_rows > 0) {
@@ -219,18 +216,14 @@ $conn = new mysqli("localhost", "root", "", "digimon");
                                 while ($row = $result->fetch_assoc()) {
                                     //put in row
                                     echo "<tr>
-
                                     <form action='select_digimon.php' method='post'>
-
-                                <td>{$row["Name"]}</td>
-                                <td>{$row["Type"]}</td>
-                                <td>{$row["HP"]}</td>
-                                <td>{$row["Attack"]}</td>
-                                <td>{$row["Level"]}</td>
+                                    <td>{$row["Name"]}</td>
+                                    <td>{$row["Type"]}</td>
+                                    <td>{$row["HP"]}</td>
+                                    <td>{$row["Attack"]}</td>
+                                    <td>{$row["Level"]}</td>
                                 ";
-
                                 if (isset($_GET["web"])){
-
                                 }
                                 else {
                                     echo "
@@ -242,12 +235,8 @@ $conn = new mysqli("localhost", "root", "", "digimon");
     
                                     ";
                                 }
-                                
-
                                 echo "
-
                                 </form>
-
                                 </tr>";
                                 }
                             }
@@ -257,7 +246,6 @@ $conn = new mysqli("localhost", "root", "", "digimon");
                             }
                             ?>
                             </table>
-
                             <a href='get_random_digimon.php?web=select_digimon<?php if(isset($_GET["web"])){
                                     $web = $_GET["web"];
                                     echo "&p_web=$web";

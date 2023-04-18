@@ -136,7 +136,8 @@ $conn = new mysqli("localhost", "root", "", "digimon");
                 <div class="box-sizing">
                     <?php
                               //my digimon stat
-                              $sql = "SELECT * FROM `tamers_owns` JOIN digimon on tamers_owns.Digimon_id = digimon.Digimon_id WHERE User_id = '$User_id' AND tamers_owns.Digimon_id = '$Digimon_id'";
+                              $sql = "SELECT * FROM `tamers_owns` JOIN digimon on tamers_owns.Digimon_id = digimon.Digimon_id 
+                              WHERE User_id = '$User_id' AND tamers_owns.Digimon_id = '$Digimon_id'";
                               $result = $conn->query($sql);
                               while ($row = $result->fetch_assoc()) {
                                   // get the stat
@@ -191,9 +192,9 @@ $conn = new mysqli("localhost", "root", "", "digimon");
                                 <?php
     //others digimon stat
     $sql = "SELECT * FROM `tamers_owns` 
-JOIN digimon on tamers_owns.Digimon_id = digimon.Digimon_id
-JOIN tamers on tamers_owns.User_id = tamers.User_id
-WHERE tamers_owns.User_id != '$User_id'";
+    JOIN digimon on tamers_owns.Digimon_id = digimon.Digimon_id
+    JOIN tamers on tamers_owns.User_id = tamers.User_id
+    WHERE tamers_owns.User_id != '$User_id'";
     $result = $conn->query($sql);
 
     // each part

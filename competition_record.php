@@ -144,7 +144,12 @@ $conn = new mysqli("localhost", "root", "", "digimon");
                         <div class="box-sizing">
 
                             <?php
-                                $sql = "SELECT `competion`.`Competion_id`,`competion`.`Date`, w_n.First_name as winner, l_n.First_name as loser,w_d.Name as winner_digimon,l_d.Name as loser_digimon FROM `competion`
+                                $sql = "SELECT `competion`.`Competion_id`,`competion`.`Date`,
+                                 w_n.First_name as winner,
+                                l_n.First_name as loser,
+                                w_d.Name as winner_digimon,
+                                l_d.Name as loser_digimon 
+                                FROM `competion`
                                 JOIN tamers_owns w on competion.Winner_own_id = w.Owner_id
                                 JOIN tamers_owns l on competion.Loser_own_id = l.Owner_id
                                 JOIN tamers w_n on w.User_id = w_n.User_id

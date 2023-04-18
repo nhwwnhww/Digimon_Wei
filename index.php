@@ -264,7 +264,7 @@ if(isset($_POST['email'])){
                                                 <label class="col-sm-2 col-form-label">Password:</label>
 
                                                 <div class="col-sm-10">
-                                                    <input type="text" id="password" name="password" class="login_input"
+                                                    <input type="password" id="password" name="password" class="login_input"
                                                         class="form-control-plaintext"></input>
                                                 </div>
                                             </div>
