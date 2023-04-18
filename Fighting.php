@@ -240,6 +240,8 @@ if(isset($_POST["result"])){
                         <div class="box-sizing">
                             <button class="btn btn-primary text-white" onclick="battleresult()">fight!</button>
                             <hr>
+                            <div id="output" id="content-container">
+                            </div>
                             <form action="Fighting.php" action="post" id="result_form" style="display:none"
                                 method="post">
 
@@ -256,9 +258,7 @@ if(isset($_POST["result"])){
 
                                 <input class="btn btn-primary text-white" type="submit" value="Go back">
                             </form>
-                            <div id="output" id="content-container">
-                            </div>
-                            <a class="btn btn-secondary text-white" style="text-decoration:none" href="normal_competiton.php">cancel</a>
+                            <a class="btn btn-secondary text-white" style="text-decoration:none" id="cancel_form" href="normal_competiton.php">cancel</a>
                             <br>
 
                             
@@ -411,9 +411,12 @@ if(isset($_POST["result"])){
                                 // var digimon_result = battle(digimon1, digimon2);
                                 battle(digimon1, digimon2);
                                 const form = document.getElementById("result_form");
+                                const cencel_form = document.getElementById("cancel_form");
                                 setTimeout(function() {
                                     form.style.display = 'block';
                                 }, delay_time);
+
+                                cencel_form.style.display = 'none';
 
                                 const B_result = document.getElementById("result");
                                 B_result.value = result;

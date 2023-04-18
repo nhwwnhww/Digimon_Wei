@@ -12,6 +12,20 @@ $First_name = $_SESSION['First_name'];
 //Create database connection -> 4 variables are 'localhost', username for the localhost (should be 'root', password for loacalhost (should be nothing), and database name
 $conn = new mysqli("localhost", "root", "", "digimon");
 
+$admin_display = 'none';
+
+$sql = "SELECT `Is_admin` FROM `tamers` WHERE `User_id` = $User_id";
+
+$result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            if ($row["Is_admin"] == 'yes'){
+                $admin_display = 'block';
+            }
+        }
+    }
+
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en-AU">
@@ -163,12 +177,12 @@ $conn = new mysqli("localhost", "root", "", "digimon");
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
 
-        echo '<table>
+        echo "<table class='table table-striped table-hover table-bordered'>
             <tr>
                 <th>Name</th>
                 <th>Type</th>
                 <th>Level</th>
-            </tr>';
+            </tr>";
 
             $count = 0;
         while ($row = $result->fetch_assoc()) {
@@ -193,7 +207,7 @@ $conn = new mysqli("localhost", "root", "", "digimon");
                     <a href="get_random_digimon.php">click me to get random digimon</a>
                     <br>
 
-                    <a href="Upload_digimon_data.php">upload digimon data</a>
+                    <a href="Upload_digimon_data.php" style="display:<?php echo $admin_display?>">upload digimon data</a>
                 </div>
             </div>
 
@@ -236,12 +250,12 @@ $conn = new mysqli("localhost", "root", "", "digimon");
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
 
-        echo '<table>
+        echo "<table class='table table-striped table-hover table-bordered'>
             <tr>
                 <th>Competition ID</th>
                 <th>data</th>
                 <th>result</th>
-            </tr>';
+            </tr>";
 
             $count = 0;
             while ($row = $result->fetch_assoc()) {
